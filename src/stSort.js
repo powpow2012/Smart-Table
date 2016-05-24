@@ -23,31 +23,12 @@ ng.module('smart-table')
 
         //view --> table state
         function sort () {
-          if (descendingFirst) {
-            index = index === 0 ? 2 : index - 1;
-          } else {
-            index++;
-          }
-
+          index++;
           var func;
           predicate = ng.isFunction(getter(scope)) || ng.isArray(getter(scope)) ? getter(scope) : attr.stSort;
-          if (index % 3 === 0 && !!skipNatural !== true) {
-            //manual reset
-            index = 0;
-            ctrl.tableState().sort = {};
-            ctrl.tableState().pagination.start = 0;
-            func = ctrl.pipe.bind(ctrl);
-          } else {
-            func = ctrl.sortBy.bind(ctrl, predicate, index % 2 === 0);
-          }
-          if (promise !== null) {
-            $timeout.cancel(promise);
-          }
-          if (throttle < 0) {
-            func();
-          } else {
-            promise = $timeout(func, throttle);
-          }
+          func = ctrl.sortBy.bind(ctrl, predicate, index % 2 === 0);
+          func();
+
         }
 
         element.bind('click', function sortClick () {
